@@ -16,6 +16,10 @@ app.use('/', routes)
 
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(docs))
 
+app.use('/ping', (req, res) => {
+	res.json({ message: 'pong' })
+})
+
 dbConnection()
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`))
