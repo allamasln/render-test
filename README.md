@@ -1,32 +1,23 @@
-# CRUD DE TAREAS CON MONGOOSE desplegar en FL0 y documentar
+# Optimizar para producción
 
-Para este ejercicio se pide documentar la API utilizando swagger y desplegar la misma en fl0. Debemos utilizar la API de tareas que creamos en la Review 2 de la semana pasada.
+1. Establecer valor a puerto condicional en función de la variable de entorno PORT
 
-La estructura actualizada será la siguiente:
-- docs
-  - components.js //componentes reutilizables para la documentación
-  - basicInfo.js // información básica de la API
-  - tasks.js // documentación de los diferentes endpoints
-  - index.js // importaremos los diferentes archivos y los exportaremos
-- config
-  - config.js // Código de la conexión a la base de datos.
-- env
-  - .env // Aquí debe ir la MONGO_URI que nos da mongoDB Atlas
-- models
-  - Task.js // Aqui ira el modelo de la tarea con los campos title, completed y los timestamps.
-- routes 
-  - tasks.js // Aquí estarán todas las rutas
-- index.js // Añadiremos nuestro servidor, conexión a la base de datos y uniremos el resto de la aplicación
+```javascript
+const PORT = process.env.PORT || 3000
+```
 
-## Endpoints de la API a documentar
-- POST /create: Endpoint para crear una tarea.
-- GET /: Endpoint para traer todas las tareas.
-- PUT /id/:_id: Endpoint para actualizar una tarea y que solo se pueda cambiar el título de la tarea. Es decir, que no me deje cambiar el campo  “completed” desde este endpoint, sino solo, el título.
-- DELETE /id/:_id: Endpoint para eliminar una tarea.
+2. Especificar a render (PaaS) la versión de nodejs estableciendo su valor en la variable de entorno `NODE_VERSIO`
 
-## Desplegar en fl0
-- https://www.fl0.com/
+https://docs.render.com/environment-variables#:~:text=install%20during%20build.-,NODE_VERSION,-See
 
+4. Instalar paquete compression y configurar middleware para que los cuerpos de las respuestas se envíen comprimidos optimizando hasta un 70% el tiempo de respuesta.
+   https://www.npmjs.com/package/compression
+5. Instalar paquete helmet que proporciona una capa de seguridad al servidor configurando un conjunto de cabeceras HTTP. Por defecto express deja desprotegido el servidor para agilizar el proceso de desarrollo pero hay debe aplicarse una configuración minima cuando esté en producción.
+   https://www.npmjs.com/package/helmet
 
-# PISTAS:
-- Ejemplos de como documentar en swagger: https://docs.google.com/presentation/d/13kmc77HqbdCoXCm62nT0CmOw62ryB3LxC6vWJ1mgQdU/edit?usp=sharing
+6. Desde el area de navegación lateral del site de atlas:
+
+- Database Access - Configurar usuario, password y permisos del usuario que tendrá acceso a la db. Credenciales que van en la URI.
+
+- Network Access - Se configuran las direcciones que podrán conectar con la base de datos.
+  La configuración `0.0.0.0/0` permite conectar desde cualquier dirección siempre que se tenga la URI.
